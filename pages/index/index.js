@@ -5,6 +5,7 @@ import HeadContent from '../../layouts/parts/headContent'
 import IndexLayout from 'layouts/indexLayout'
 import withReduxHOC from '../../components/withReduxHOC'
 import LoadingNotice from '../../components/loading_notice';
+import * as actionCreators from 'actions/postsAction'
 
 class Index extends PureComponent {
   state = {
@@ -45,7 +46,7 @@ class Index extends PureComponent {
   }
 }
 
-export default withReduxHOC(Index);
+export default withReduxHOC(Index, actionCreators);
 
 /* const withLoading = (key) => WrappedComponent => {
   return class extends PureComponent {

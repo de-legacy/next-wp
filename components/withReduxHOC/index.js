@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
 import { compose, bindActionCreators } from 'redux'
-import * as actionCreators from 'actions/postsAction'
 
-const withReduxHOC = (WrappedComponent) => {
+const withReduxHOC = (WrappedComponent, actionCreators) => {
   return class extends Component {
     static async getInitialProps(ctx) {
       const pageProps = WrappedComponent.getInitialProps ? await WrappedComponent.getInitialProps(ctx) : {}
