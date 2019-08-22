@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { connect } from "react-redux"
 import { compose, bindActionCreators } from 'redux'
 
-const withReduxHOC = (WrappedComponent, actionCreators) => {
-  return class extends Component {
+const withReduxHOC = (WrappedComponent, mapStateToProps, actionCreators) => {
+  class ReduxContainer extends Component {
     static async getInitialProps(ctx) {
       const pageProps = WrappedComponent.getInitialProps ? await WrappedComponent.getInitialProps(ctx) : {}
 
@@ -24,12 +24,8 @@ const withReduxHOC = (WrappedComponent, actionCreators) => {
       )
     }
   }
+
+  return connect(mapStateToProps)(ReduxContainer);
 }
 
-const mapStateToProps = state => {
-  return {
-    ...state
-  }
-}
-
-export default compose(connect(mapStateToProps), withReduxHOC);
+export default withReduxHOC;

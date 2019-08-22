@@ -6,7 +6,7 @@ import Posts from '../api/postsApi';
 
 export const getIndexPosts = () => dispatch => {
   dispatch({
-    type: GET_INDEX_POSTS_SUCCESS,
+    type: GET_INDEX_POSTS_LOADING,
     payload: {
       meta: {
         status: 'loading',

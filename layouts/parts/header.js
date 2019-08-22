@@ -9,8 +9,8 @@ export default class Header extends Component {
 
         <nav className="menu">
           <ul>
-            <li><Link href="/">Home</Link></li>
-            <li><Link href="/about">About</Link></li>
+            <li><Link href="/"><a>Home</a></Link></li>
+            <li><Link href="/about"><a>About</a></Link></li>
           </ul>
         </nav>
       </div>

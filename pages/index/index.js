@@ -1,11 +1,9 @@
 import React, { PureComponent } from 'react'
-import { getIndexPosts } from 'actions/postsAction'
-
 import HeadContent from '../../layouts/parts/headContent'
 import IndexLayout from 'layouts/indexLayout'
 import withReduxHOC from '../../components/withReduxHOC'
 import LoadingNotice from '../../components/loading_notice';
-import * as actionCreators from 'actions/postsAction'
+import * as postActions from 'actions/postsAction'
 
 class Index extends PureComponent {
   state = {
@@ -17,17 +15,20 @@ class Index extends PureComponent {
   }
 
   static async getInitialProps({ store }) {
-    await store.dispatch(getIndexPosts());
+    // await store.dispatch(getIndexPosts());
 
     return { }
   } 
 
 
-  componentDidMount() {
-    // this.props.getIndexPosts()
+  async componentDidMount() {
+    this.props.getIndexPosts()
   }
 
   render() {
+    const isStatusExists = typeof this.props.posts !== 'undefined'
+      && typeof this.props.posts.meta !== 'undefined' ? this.props.posts.meta.status : 'loading';
+
     return (
       <>
         <HeadContent title="Welcome to my site">
@@ -35,9 +36,8 @@ class Index extends PureComponent {
         </HeadContent>
         
         <IndexLayout>
-          <h2>Indexingz</h2>
-
-          <LoadingNotice status={this.props.posts.meta ? this.props.posts.meta.status : 'loading'}>
+          <h2>Index Page</h2>
+          <LoadingNotice status={isStatusExists}>
             <p>{JSON.stringify(this.props.posts)}</p>
           </LoadingNotice>
         </IndexLayout>
@@ -46,24 +46,14 @@ class Index extends PureComponent {
   }
 }
 
-export default withReduxHOC(Index, actionCreators);
-
-/* const withLoading = (key) => WrappedComponent => {
-  return class extends PureComponent {
-    static async getInitialProps(ctx) {
-      const pageProps = WrappedComponent.getInitialProps ? await WrappedComponent.getInitialProps(ctx) : {}
-
-      return { ...pageProps }
-    }
-
-    render() {
-      return (
-        <>
-          {this.props[key] && this.props[key].meta.status === 'loading' && <p>Loading...</p>}
-
-          <WrappedComponent  {...this.props} />
-        </>
-      )
-    }
-  }
+/* const mapStateToProps = ({ posts }) => {
+  return { posts: posts }
 } */
+
+const mapStateToProps = (state) => {
+  return {  
+    ...state
+  }
+}
+
+export default withReduxHOC(Index, mapStateToProps, postActions);
