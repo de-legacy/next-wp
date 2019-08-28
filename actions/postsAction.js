@@ -1,12 +1,12 @@
-export const GET_INDEX_POSTS_LOADING = 'GET_INDEX_POSTS_LOADING';
-export const GET_INDEX_POSTS_ERROR = 'GET_INDEX_POSTS_ERROR';
-export const GET_INDEX_POSTS_SUCCESS = 'GET_INDEX_POSTS_SUCCESS';
+export const GET_POSTS_LOADING = 'GET_POSTS_LOADING';
+export const GET_POSTS_ERROR = 'GET_POSTS_ERROR';
+export const GET_POSTS_SUCCESS = 'GET_POSTS_SUCCESS';
 
 import Posts from '../api/postsApi';
 
-export const getIndexPosts = () => dispatch => {
+export const getPosts = (params) => dispatch => {
   dispatch({
-    type: GET_INDEX_POSTS_LOADING,
+    type: GET_POSTS_LOADING,
     payload: {
       meta: {
         status: 'loading',
@@ -16,15 +16,15 @@ export const getIndexPosts = () => dispatch => {
     }
   })
 
-  return Posts.getPosts().then(result => {
+  return Posts.getPosts(params).then(result => {
     if (result.meta.status === 'success') {
       dispatch({
-        type: GET_INDEX_POSTS_SUCCESS,
+        type: GET_POSTS_SUCCESS,
         payload: result
       })
     } else {
       dispatch({
-        type: GET_INDEX_POSTS_ERROR,
+        type: GET_POSTS_ERROR,
         payload: result
       })
     }

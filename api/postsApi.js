@@ -1,9 +1,10 @@
-import axios, { get } from "axios";
+import { get } from "axios";
 import { POST_API_URL } from '../config';
 import Utils from '../utils';
+import paramsToQueryString from '../utils/paramsToQuerystring'
 
-const getPosts = () => {
-  return axios.get(POST_API_URL)
+const getPosts = (params) => {
+  return get(POST_API_URL + paramsToQueryString(params))
     .then(data => {
       const result = Utils.normalizePosts(data)
 

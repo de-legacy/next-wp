@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { getIndexPosts } from 'actions/postsAction'
+import { getPosts } from 'actions/postsAction'
 import Connect from 'components/withReduxHOC/redux_connect'
 import Blog from '../blog';
 
@@ -26,10 +26,10 @@ class About extends PureComponent {
       <>
         <Connect
           mapStateToProps={({ posts }) => ({ posts })}
-          mapDispatchToProps={{ getIndexPosts }}
+          mapDispatchToProps={{ getPosts }}
         >
-          {({ getIndexPosts, posts }) => (
-            <Blog getPosts={getIndexPosts} posts={posts} />
+          {({ getPosts, posts }) => (
+            <Blog getPosts={getPosts} posts={posts} />
           )}
         </Connect>
       </>

@@ -1,8 +1,8 @@
 import {
-  GET_POSTS_LOADING,
-  GET_POSTS_ERROR,
-  GET_POSTS_SUCCESS 
-} from '../actions/postsAction';
+  GET_SITE_INFO_LOADING,
+  GET_SITE_INFO_ERROR,
+  GET_SITE_INFO_SUCCESS
+} from '../actions/siteAction';
 
 const initialState = {
   meta: {
@@ -12,13 +12,13 @@ const initialState = {
   data: [],
 }
 
-export default function posts(state = initialState, action) {
+export default function site(state = initialState, action) {
   switch (action.type) {
-    case GET_POSTS_LOADING:
+    case GET_SITE_INFO_LOADING:
       return { ...state, ...action.payload }
-    case GET_POSTS_ERROR:
+    case GET_SITE_INFO_ERROR:
       return { ...state, ...action.payload }
-    case GET_POSTS_SUCCESS:
+    case GET_SITE_INFO_SUCCESS:
       return { ...state, ...action.payload }
     default:
       return {

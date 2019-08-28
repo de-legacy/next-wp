@@ -3,7 +3,6 @@ const normalizePosts = (response) => {
 
   return posts.map(post => {
     const { id, date, date_gmt, slug, title, content, excerpt, status, _embedded } = post;
-
     return {
       id,
       date,
@@ -12,8 +11,8 @@ const normalizePosts = (response) => {
       slug,
       title: title.rendered,
       content: content.rendered,
-      excerpt: excerpt.rendered,
-      featuredMedia: _embedded['wp:featuredmedia'].map(media => {
+      excerpt: excerpt.rendered.replace(new RegExp('<\s*a[^>]*>(.*?)<\s*/\s*a>'), ''),
+      featuredMedia: typeof _embedded['wp:featuredmedia'] === 'undefined' ? [] : _embedded['wp:featuredmedia'].map(media => {
         const { id, title, caption, media_details } = media;
 
         return {
@@ -23,7 +22,7 @@ const normalizePosts = (response) => {
           media: media_details.sizes
         }
       }),
-      author: _embedded.author.map(author => {
+      author: typeof _embedded.author === 'undefined' ? [] : _embedded.author.map(author => {
         const { name, url, description } = author;
         return {
           name,
