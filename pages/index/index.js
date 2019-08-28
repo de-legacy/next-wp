@@ -3,7 +3,7 @@ import HeadContent from 'layouts/parts/headContent'
 import IndexLayout from 'layouts/indexLayout'
 import LoadingNotice from 'components/loading_notice';
 import { connect } from 'react-redux';
-import { getPosts } from 'actions/postsAction'
+import { getPosts, loadMorePosts } from 'actions/postsAction'
 import { getSiteInfo } from 'actions/siteAction'
 import Link from 'next/link'
 
@@ -37,9 +37,24 @@ class Index extends PureComponent {
     // this.props.getPosts()
   }
 
+  loadMore = async () => {
+    const { dispatch } = this.props;
+    const params = {
+      _embed: null,
+      page: this.state.page + 1,
+      per_page: 10
+    }
+
+    this.setState({
+      page: this.state.page + 1,
+    })
+
+    await dispatch(loadMorePosts(params));
+  }
+
   render() {
     const { site: { meta, data } } = this.props;
-    const isStatusExists = typeof this.props.posts !== 'undefined'
+    const isStatusPostsExists = typeof this.props.posts !== 'undefined'
       && typeof this.props.posts.meta !== 'undefined' ? this.props.posts.meta.status : 'loading';
 
     return (
@@ -52,10 +67,14 @@ class Index extends PureComponent {
           {
             this.props.posts.data.map(post => {
               return (
-                <SummaryContent {...post} />
+                <SummaryContent key={post.id} {...post} />
               )
             })
           }
+
+          <LoadingNotice status={isStatusPostsExists}>
+            <button onClick={this.loadMore}>Load More</button>
+          </LoadingNotice>
         </IndexLayout>
       </>
     )
