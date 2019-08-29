@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3022",
+    "dev": "node server.js -p 3022",
     "build": "next build",
-    "start": "next start",
+    "start": "NODE_PATH=. NODE_ENV=production node server.js",
     "analyze": "BUNDLE_ANALYZE=both yarn build"
   },
   "dependencies": {
@@ -25,5 +25,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "cacheable-response": "^1.6.12"
+  }
 }

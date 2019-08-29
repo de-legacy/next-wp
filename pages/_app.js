@@ -2,6 +2,7 @@ import App, { Container } from "next/app";
 import { Provider } from "react-redux";
 import withRedux from "next-redux-wrapper";
 import initStore from "../store/index";
+import site from '../api/siteApi';
 
 class NextWPBlogApp extends App {
   static async getInitialProps({ Component, router, ctx }) {

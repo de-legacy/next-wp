@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react'
-import HeadContent from 'layouts/parts/headContent'
 import IndexLayout from 'layouts/indexLayout'
 import LoadingNotice from 'components/loading_notice';
 import { connect } from 'react-redux';
@@ -20,21 +19,37 @@ class Index extends PureComponent {
     per_page: 10
   }
 
-  static async getInitialProps({ store }) {
+  static async getInitialProps({ store, res }) {
     const params = {
-      _embed : null,
+      _embed: null,
       page: 1,
-      per_page : 10
+      per_page: 10
     }
-    await store.dispatch(getSiteInfo());
-    await store.dispatch(getPosts(params));
+    
+    if (res) {
+      const siteInfo = store.dispatch(getSiteInfo());
+      const posts = store.dispatch(getPosts(params));
+
+      await Promise.all([
+        siteInfo, posts
+      ])
+    }
 
     return { }
   } 
 
+  componentDidMount() {
+    // const params = {
+    //   _embed: null,
+    //   page: 1,
+    //   per_page: 10
+    // }
+    // const siteInfo = this.props.dispatch(getSiteInfo());
+    // const posts = this.props.dispatch(getPosts(params));
 
-  async componentDidMount() {
-    // this.props.getPosts()
+    // Promise.all([
+    //   siteInfo, posts
+    // ])
   }
 
   loadMore = async () => {
@@ -59,17 +74,13 @@ class Index extends PureComponent {
 
     return (
       <>
-        <HeadContent title={data.name}>
-          <meta name="keywords" content="React,Next,JavaScript" />
-        </HeadContent>
-        
         <IndexLayout {...this.props}>
           {
-            this.props.posts.data.map(post => {
+            this.props.posts.data ? this.props.posts.data.map(post => {
               return (
                 <SummaryContent key={post.id} {...post} />
               )
-            })
+            }) : 'Loading...'
           }
 
           <LoadingNotice status={isStatusPostsExists}>
