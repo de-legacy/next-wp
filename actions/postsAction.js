@@ -48,7 +48,6 @@ export const loadMorePosts = (params) => dispatch => {
   })
 
   return Posts.getPosts(params).then(result => {
-    console.log(`RESULTTT`, result)
     
     if (result.meta.status === 'success') {
       dispatch({

@@ -10,8 +10,8 @@ class Single extends PureComponent {
     return { slug: slug }
   }
 
-  async componentDidMount() {
-    await this.props.dispatch(getSiteInfo());
+  componentDidMount() {
+    // this.props.dispatch(getSiteInfo());
   }
 
   render() {

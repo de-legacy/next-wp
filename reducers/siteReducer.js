@@ -1,7 +1,8 @@
 import {
   GET_SITE_INFO_LOADING,
   GET_SITE_INFO_ERROR,
-  GET_SITE_INFO_SUCCESS
+  GET_SITE_INFO_SUCCESS,
+  SET_SITE_INFO_SUCCESS
 } from '../actions/siteAction';
 
 const initialState = {
@@ -19,6 +20,8 @@ export default function site(state = initialState, action) {
     case GET_SITE_INFO_ERROR:
       return { ...state, ...action.payload }
     case GET_SITE_INFO_SUCCESS:
+      return { ...state, ...action.payload }
+    case SET_SITE_INFO_SUCCESS:
       return { ...state, ...action.payload }
     default:
       return {

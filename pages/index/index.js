@@ -3,8 +3,6 @@ import IndexLayout from 'layouts/indexLayout'
 import LoadingNotice from 'components/loading_notice';
 import { connect } from 'react-redux';
 import { getPosts, loadMorePosts } from 'actions/postsAction'
-import { getSiteInfo } from 'actions/siteAction'
-import Link from 'next/link'
 
 import SummaryContent from '../../components/summary_content';
 
@@ -19,38 +17,26 @@ class Index extends PureComponent {
     per_page: 10
   }
 
-  static async getInitialProps({ store, res }) {
+  static async getInitialProps(ctx) {
+    const { store, req } = ctx;
+
     const params = {
       _embed: null,
       page: 1,
       per_page: 10
     }
+
     
-    if (res) {
-      const siteInfo = store.dispatch(getSiteInfo());
-      const posts = store.dispatch(getPosts(params));
+    if (req) {
+      await store.dispatch(getPosts(params));
+      
+      return { }
+    } else {
+      store.dispatch(getPosts(params));
 
-      await Promise.all([
-        siteInfo, posts
-      ])
+      return { }
     }
-
-    return { }
   } 
-
-  componentDidMount() {
-    // const params = {
-    //   _embed: null,
-    //   page: 1,
-    //   per_page: 10
-    // }
-    // const siteInfo = this.props.dispatch(getSiteInfo());
-    // const posts = this.props.dispatch(getPosts(params));
-
-    // Promise.all([
-    //   siteInfo, posts
-    // ])
-  }
 
   loadMore = async () => {
     const { dispatch } = this.props;
@@ -72,9 +58,10 @@ class Index extends PureComponent {
     const isStatusPostsExists = typeof this.props.posts !== 'undefined'
       && typeof this.props.posts.meta !== 'undefined' ? this.props.posts.meta.status : 'loading';
 
+    
     return (
       <>
-        <IndexLayout {...this.props}>
+        <IndexLayout site={this.props.site}>
           {
             this.props.posts.data ? this.props.posts.data.map(post => {
               return (
