@@ -8,6 +8,8 @@ import {
 } from '../actions/postsAction';
 
 const initialState = {
+  persistExpiresAt: 10,
+  loadedAt: new Date().toISOString(),
   meta: {
     status: 'loading',
     message: '',

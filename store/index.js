@@ -3,9 +3,26 @@ import logger from 'redux-logger'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import rootReducer from '../reducers'
+import { persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+import expireReducer from 'redux-persist-expire';
 
+const persistConfig = {
+  transforms: [
+    expireReducer('posts', {
+      persistedAtKey: 'loadedAt',
+      expireSeconds: 10,
+      expiredState: {},
+    })
+  ],
+  key: 'root',
+  storage,
+  whitelist: ['site', 'posts'] // place to select which state you want to persist
+}
 
-export const initStore = (initialState = { posts: {} }) => {
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
+export const initializeStore = (initialState = { posts: {}, site: {} }) => {
   return createStore(
     rootReducer,
     initialState,
@@ -13,4 +30,4 @@ export const initStore = (initialState = { posts: {} }) => {
   )
 }
 
-export default initStore;
+export default initializeStore;

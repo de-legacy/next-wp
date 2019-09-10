@@ -10,6 +10,8 @@ import Posts from '../api/postsApi';
 
 export const getPosts = (params) => dispatch => {
   dispatch({
+    loadedAt: new Date().toJSON(),
+    persistExpiresAt: 10,
     type: GET_POSTS_LOADING,
     payload: {
       meta: {
@@ -23,11 +25,13 @@ export const getPosts = (params) => dispatch => {
   return Posts.getPosts(params).then(result => {
     if (result.meta.status === 'success') {
       dispatch({
+        loadedAt: new Date().toJSON(),
         type: GET_POSTS_SUCCESS,
         payload: result
       })
     } else {
       dispatch({
+        loadedAt: new Date().toJSON(),
         type: GET_POSTS_ERROR,
         payload: result
       })

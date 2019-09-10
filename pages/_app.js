@@ -1,39 +1,48 @@
 import App, { Container } from "next/app";
 import { Provider } from "react-redux";
-import withRedux from "next-redux-wrapper";
-import initStore from "../store/index";
-import site from '../api/siteApi';
-import { setSiteInfo } from '../actions/siteAction';
+import { persistStore } from 'redux-persist'
+import { PersistGate } from 'redux-persist/integration/react'
+import withReduxStore from '../lib/with-redux-store'
 
 
 class NextWPBlogApp extends App {
-  static async getInitialProps({ Component, router, ctx, req }) {
-    const pageProps = Component.getInitialProps
-      ? await Component.getInitialProps(ctx)
-      : { };
-
-    return { pageProps };
+  constructor(props) {
+    super(props)
+    this.persistor = persistStore(props.reduxStore)
   }
 
-  componentDidMount() {
-    if (typeof localStorage.getItem('siteData') === 'undefined' || localStorage.getItem('siteData') === null) {
-      site.getSiteInfo().then(siteData => {
-        this.props.store.dispatch(setSiteInfo(siteData));
-        localStorage.setItem('siteData', JSON.stringify(siteData));
-      });
-    }
-  }
+  // static async getInitialProps({ Component, router, ctx, req }) {
+  //   const pageProps = Component.getInitialProps
+  //     ? await Component.getInitialProps(ctx)
+  //     : { };
+
+  //   return { pageProps };
+  // }
+
+  // componentDidMount() {
+  //   if (typeof localStorage.getItem('siteData') === 'undefined' || localStorage.getItem('siteData') === null) {
+  //     site.getSiteInfo().then(siteData => {
+  //       this.props.reduxStore.dispatch(setSiteInfo(siteData));
+  //       localStorage.setItem('siteData', JSON.stringify(siteData));
+  //     });
+  //   }
+  // }
 
   render() {
-    const { Component, pageProps, store } = this.props;
+    const { Component, pageProps, reduxStore } = this.props;
     return (
       <Container>
-        <Provider store={store}>
-          <Component {...pageProps} />
+        <Provider store={reduxStore}>
+          <PersistGate
+            loading={<Component {...pageProps} />}
+            persistor={this.persistor}
+          >
+            <Component {...pageProps} />
+          </PersistGate>
         </Provider>
       </Container>
     );
   }
 }
 
-export default withRedux(initStore)(NextWPBlogApp);
+export default withReduxStore(NextWPBlogApp);

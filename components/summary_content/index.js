@@ -10,7 +10,7 @@ const SummaryContent = (props) => {
     <div className="summary-content">
       <div className="content-left">
         <h1 className="content-title">
-          <Link href={`${slug}`}>
+          <Link href="/[slug]" as={`/${slug}`}>
            <a>{ title }</a>
           </Link>
         </h1>

@@ -13,16 +13,16 @@ export default class Header extends Component {
   }
 
   componentDidMount() {
-    const site = typeof localStorage.getItem('siteData') === 'undefined' || localStorage.getItem('siteData') === null ?
-      this.props.site : JSON.parse(localStorage.getItem('siteData'));
+    // const site = typeof localStorage.getItem('siteData') === 'undefined' || localStorage.getItem('siteData') === null ?
+    //   this.props.site : JSON.parse(localStorage.getItem('siteData'));
 
-    this.setState({
-      site: site
-    })
+    // this.setState({
+    //   site: site
+    // })
   }
 
   render() {
-    const site = this.state.site.meta.status === 'success' ? this.state.site : this.props.site ;
+    const site = this.props.site ;
 
     return (
       <>
