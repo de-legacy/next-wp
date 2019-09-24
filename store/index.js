@@ -22,7 +22,7 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
-export const initializeStore = (initialState = { posts: {}, site: {} }) => {
+export const initializeStore = (initialState = { posts: { meta: { status: 'loading' }, data: [] }, site: {} }) => {
   return createStore(
     rootReducer,
     initialState,

@@ -3,8 +3,7 @@ const normalizePosts = (response) => {
 
   return posts.map(post => {
     const { id, date, date_gmt, slug, title, content, excerpt, status, _embedded } = post;
-    console.log(`DEBUGGER`);
-    console.log(_embedded);
+   
     return {
       id,
       date,

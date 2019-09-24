@@ -10,10 +10,7 @@ import SummaryContent from '../../components/summary_content';
 
 class Index extends PureComponent {
   state = {
-    index_posts: {
-      meta: { status: '' },
-      data: []
-    },
+    is_post_loading: false,
     page: 1,
     per_page: 10
   }
@@ -21,77 +18,64 @@ class Index extends PureComponent {
   static async getInitialProps(ctx) {
     const { reduxStore, req } = ctx;
 
+    if (req) {
+      const siteInfo = reduxStore.dispatch(getSiteInfo());
+
+      await Promise.all([
+        siteInfo
+      ])
+    } 
+
+    return {}
+  } 
+
+  componentDidMount() {
     const params = {
       _embed: null,
       page: 1,
       per_page: 10
     }
-    
-    if (req) {
-      const siteInfo = reduxStore.dispatch(getSiteInfo());
-      const posts = reduxStore.dispatch(getPosts(params));
 
-      await Promise.all([
-        siteInfo, posts
-      ])
-    } else {
-      const posts = reduxStore.getState().posts;
-      
-      if (Object.keys(posts).length <= 0) {
-        await reduxStore.dispatch(getPosts(params));
-      }
-    }
-
-    return {}
-  } 
-  
-  componentDidMount() {
-    this.setState({
-      index_posts: this.props.posts
-    })
+    this.props.dispatch(getPosts(params))
   }
 
-  loadMore = async () => {
-    const { dispatch } = this.props;
-    const params = {
-      _embed: null,
-      page: this.state.page + 1,
-      per_page: 10
-    }
-    
-    const loadedPosts = await Posts.getPosts(params)
-    const oldPosts = this.state.index_posts.data;
-    oldPosts.push(loadedPosts);
+
+  loadMore = () => {
+    let nextPage = this.state.page + 1;
 
     this.setState({
-      index_posts: oldPosts,
-      page: this.state.page + 1,
+      page: nextPage,
     })
 
-    
-    // await dispatch(loadMorePosts(params));
+    const params = {
+      _embed: null,
+      page: nextPage,
+      per_page: this.state.per_page
+    }
+
+    this.props.dispatch(loadMorePosts(params));
   }
 
   render() {
-    const { site: { meta, data } } = this.props;
-    const isStatusPostsExists = typeof this.state.index_posts !== 'undefined'
-      && typeof this.state.index_posts.meta !== 'undefined' ? this.state.index_posts.meta.status : 'loading';
-
-    
     return (
       <>
         <IndexLayout site={this.props.site}>
           {
-            this.state.index_posts.data ? this.state.index_posts.data.map(post => {
-              return (
-                <SummaryContent key={post.id} {...post} />
-              )
-            }) : 'Loading...'
+            this.props.posts.meta.status === 'loading' && this.props.posts.data.length <= 0 ? 'Loading...' : 
+              this.props.posts.data.map(post => {
+                return (
+                  <SummaryContent key={post.id} {...post} />
+                )
+              })
           }
-
-          <LoadingNotice status={isStatusPostsExists}>
-            <button onClick={this.loadMore}>Load More</button>
-          </LoadingNotice>
+          
+          {
+            this.props.posts.meta.status === 'loading' && this.props.posts.data.length > 0 ? 'Loading...' :
+              <div className="loadmore-wrapper">
+                <button onClick={this.loadMore}>Load More</button>
+              </div>
+          }
+          
         </IndexLayout>
       </>
     )

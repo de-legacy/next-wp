@@ -22,24 +22,35 @@ class Single extends PureComponent {
   }
   static async getInitialProps({ query, reduxStore, req }) {
     const slug = query.slug;
+    let post = {};
 
     if (req) {
       await reduxStore.dispatch(getSiteInfo());
+      post = await Posts.getPosts({ slug: query.slug });
     }
 
-    return { slug: slug }
+    return { slug: slug, post: post }
   }
 
-  componentDidMount() {
-    const params = {
-      slug: this.props.slug
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (Object.keys(nextProps.post).length > 0) {
+      return { ...prevState, post: nextProps.post };
     }
 
-    Posts.getPosts(params).then(response => {
-      this.setState({
+    return prevState;
+  }
+ 
+
+  componentDidMount() {
+    const that = this;
+
+    Posts.getPosts({ slug: this.props.slug }).then((response) => {
+      console.log(`RESPONSE+++>`)
+      console.log(response)
+      that.setState({
         post: response
       })
-    })
+    });
   }
 
   render() {
@@ -51,7 +62,7 @@ class Single extends PureComponent {
           {
             meta.status === 'loading' ? 'Loading...' : 
               <>
-                <h1 className="post-title">{ title }</h1>
+                <h1 className="single-title">{ title }</h1>
                 { htmlToReactParser.parse(content) }
               </>
           } 
