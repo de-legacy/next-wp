@@ -62,20 +62,23 @@ class Index extends PureComponent {
         <IndexLayout site={this.props.site}>
           {
             this.props.posts.meta.status === 'loading' && this.props.posts.data.length <= 0 ? 'Loading...' : 
-              this.props.posts.data.map(post => {
-                return (
-                  <SummaryContent key={post.id} {...post} />
-                )
-              })
+             <>
+              {
+                this.props.posts.data.map(post => {
+                  return (
+                    <SummaryContent key={post.id} {...post} />
+                  )
+                })
+              }
+
+              {
+                this.props.posts.meta.status === 'loading' && this.props.posts.data.length > 0 ? 'Loading...' :
+                  <div className="loadmore-wrapper">
+                    <button onClick={this.loadMore}>Load More</button>
+                  </div>
+              }
+             </>
           }
-          
-          {
-            this.props.posts.meta.status === 'loading' && this.props.posts.data.length > 0 ? 'Loading...' :
-              <div className="loadmore-wrapper">
-                <button onClick={this.loadMore}>Load More</button>
-              </div>
-          }
-          
         </IndexLayout>
       </>
     )

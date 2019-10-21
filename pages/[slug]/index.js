@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { getSiteInfo } from 'actions/siteAction'
 import Posts from '../../api/postsApi';
 import { Parser as HtmlToReactParser } from 'html-to-react';
+import styles from './single.style';
 
 const htmlToReactParser = new HtmlToReactParser();
 
@@ -20,6 +21,7 @@ class Single extends PureComponent {
       }]
     }
   }
+
   static async getInitialProps({ query, reduxStore, req }) {
     const slug = query.slug;
     let post = {};
@@ -45,8 +47,6 @@ class Single extends PureComponent {
     const that = this;
 
     Posts.getPosts({ slug: this.props.slug }).then((response) => {
-      console.log(`RESPONSE+++>`)
-      console.log(response)
       that.setState({
         post: response
       })
@@ -67,6 +67,10 @@ class Single extends PureComponent {
               </>
           } 
         </div>
+
+        <style jsx>
+          {styles}
+        </style>
       </IndexLayout>
     )
   }

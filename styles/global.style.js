@@ -3,10 +3,8 @@ import css from 'styled-jsx/css';
 
 export default css.global`
   *, ::before, ::after {
-
-      box-sizing: border-box;
-      font-kerning: normal;
-
+    box-sizing: border-box;
+    font-kerning: normal;
   }
 
   html {
@@ -19,10 +17,12 @@ export default css.global`
     font-size: 1.65rem;
     line-height: 2.5rem;
   }
-   
+
   p {
-    line-height: 3rem;
+    font-size: 1.8rem;
     margin-top: 0;
+    line-height: 3.4rem;
+    margin-bottom: 3.2rem;
   }
 
   a {
@@ -52,5 +52,10 @@ export default css.global`
 
   .flat-list ul li {
     list-style: none;
+  }
+
+  img.aligncenter.size-full {
+    margin-left: 50%;
+    transform: translateX(-50%);
   }
 `;

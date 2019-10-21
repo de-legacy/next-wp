@@ -4,7 +4,6 @@ import Utils from '../utils';
 import paramsToQueryString from '../utils/paramsToQuerystring'
 
 const getPosts = (params) => {
-  console.log(`+++calling getPosts`)
   return get(POST_API_URL + paramsToQueryString(params))
     .then(data => {
       const result = Utils.normalizePosts(data)
@@ -19,6 +18,7 @@ const getPosts = (params) => {
       }
     })
     .catch(error => {
+      console.log(error)
       return {
         loadedAt: new Date().toISOString(),
         meta: {

@@ -12,15 +12,6 @@ export default class Header extends Component {
     }
   }
 
-  componentDidMount() {
-    // const site = typeof localStorage.getItem('siteData') === 'undefined' || localStorage.getItem('siteData') === null ?
-    //   this.props.site : JSON.parse(localStorage.getItem('siteData'));
-
-    // this.setState({
-    //   site: site
-    // })
-  }
-
   render() {
     const site = this.props.site ;
 
